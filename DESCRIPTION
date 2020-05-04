@@ -1,11 +1,12 @@
 Package: rcovidUK
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Data to understand the effects of Covid19 in the UK
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Francis J. DiTraglia and Daniel Meade
+Maintainer: The package maintainer <francis.ditraglia@economics.ox.ac.uk>
+Description: Merges publicly available data from various sources, including the ONS, to better understand the effects of Covid19 in the UK.
+License: GNU General Public License v3.0
 Encoding: UTF-8
 LazyData: true
+Depends: 
+    R (>= 2.10)
