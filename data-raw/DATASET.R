@@ -17,7 +17,7 @@ file_type_2020<- ".xlsx"
 file_type_previous <- ".xls"
 
 #Set the most recent week of data for 2020
-week_2020 <- "16"
+week_2020 <- "17"
 week_2020_int <- as.integer(week_2020)
 
 #Define previous years to download
@@ -35,7 +35,6 @@ download.file(paste(url_prefix,
                     url_suffix,
                     week_2020,
                     "2020",
-                    "1",
                     file_type_2020,
                     sep = ""),
               temp.file, mode = "wb")
