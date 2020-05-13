@@ -44,10 +44,10 @@ df_2020 <- temp.file %>%
   read_excel(sheet = "Weekly figures 2020", range = cell_rows(5:85)) %>%
   slice(-1:-38) %>%
   slice(-21:-22) %>% #Remove unnecessary rows
-  select(-1) %>%
+  select(-1) %>% #Remove empty first column
   mutate(rn = row_number(),
          gender = as.factor(case_when(rn <= 20 ~ "Men",
-                            rn > 20 ~ "Women"))) %>% #Remove unnecessary column
+                                      rn > 20 ~ "Women"))) %>% #add gender var
   rename(age = 1) %>%
   select(-rn) %>% # rename region name and id
   rename_at(vars(-1, -gender), function(x){paste0("week_", x)}) %>%
@@ -64,7 +64,7 @@ df_2020 <- temp.file %>%
          age_upper = case_when(
            age_lower == 90 ~ 90,
            age_lower!= 90 ~ age_upper,
-           is.na(age_lower) ~ age_upper),
+           is.na(age_lower) ~ age_upper),#Use split string to make ages consistent
          age_groups = case_when(age_upper == 1 ~ 1,
                                 age_upper > 1 & age_upper <= 14 ~ 2,
                                 age_upper > 14 & age_upper <= 44 ~ 3,
@@ -73,7 +73,7 @@ df_2020 <- temp.file %>%
                                 age_upper > 74 & age_upper <= 84 ~ 6,
                                 age_upper > 84 ~ 7)) %>%
   group_by(age_groups, week, gender) %>%
-  summarise(deaths = sum(deaths)) %>%
+  summarise(deaths = sum(deaths)) %>% # make ages consist with prev years
   ungroup() %>%
   mutate(age = factor(age_groups,
                       levels = 1:7,
@@ -84,7 +84,7 @@ df_2020 <- temp.file %>%
                                  "65-74",
                                  "75-84",
                                  "85<")),
-         year = "2020") %>%
+         year = "2020") %>% # create factor with ages
   select(age, gender, week, deaths, year)
 
 #Download Previous Years' Data--------------------------------------------------
@@ -147,10 +147,10 @@ prev_download <- lapply(prev_yrs, function(x) {
 
   #Need to convert to long format
   df <- df %>%
-    slice(-8:-9)%>%
+    slice(-8:-9)%>% #Remove blank space between men and women
     dplyr::mutate(rn = row_number(),
            gender = as.factor(case_when(rn <= 7 ~ "Men",
-                                        rn > 7 ~ "Women"))) %>% #Remove unnecessary column
+                                        rn > 7 ~ "Women"))) %>% # add gender var
     rename(age = 1) %>%
     select(-rn) %>% # rename region name and id
     rename_at(vars(-1, -gender), function(x){paste0("week_", x)}) %>%
@@ -168,7 +168,7 @@ prev_download <- lapply(prev_yrs, function(x) {
              age == "01-14" ~ "1-14",
              age == "85+" ~ "85<",
              age != "Under 1 year" & age != "01-14" ~ age),
-           age = as.factor(age))
+           age = as.factor(age)) # Reformat so consist with 2020 factor
 })
 
 df_prev <- do.call(rbind, prev_download)
