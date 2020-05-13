@@ -178,11 +178,11 @@ df_prev <- do.call(rbind, prev_download)
 #Combine into one dataset------------------------------------------------------
 
 #Add region id for all years and combine all years in one
-ONSweeklyage <- df_prev %>%
+ONSweeklyagegender <- df_prev %>%
   bind_rows(df_2020)
 
 
-usethis::use_data(ONSweeklyage, overwrite = TRUE)
+usethis::use_data(ONSweeklyagegender, overwrite = TRUE)
 
 # Clean up
 rm(list = ls())
