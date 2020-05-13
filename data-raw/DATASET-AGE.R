@@ -44,7 +44,7 @@ df_2020 <- temp.file %>%
   read_excel(sheet = "Weekly figures 2020", range = cell_rows(5:41)) %>%
   slice(-1:-16) %>% #Remove unnecessary rows
   select(-1) %>% #Remove unnecessary column
-  rename(age = 1) %>% # rename region name and id
+  rename(age = 1) %>% # rename age
   rename_at(vars(-1), function(x){paste0("week_", x)}) %>%
   mutate_at(vars(-1), as.integer) %>%
   pivot_longer(cols = starts_with("week"),
@@ -59,7 +59,7 @@ df_2020 <- temp.file %>%
          age_upper = case_when(
            age_lower == 90 ~ 90,
            age_lower!= 90 ~ age_upper,
-           is.na(age_lower) ~ age_upper),
+           is.na(age_lower) ~ age_upper), # Use string to define categories
          age_groups = case_when(age_upper == 1 ~ 1,
                                 age_upper > 1 & age_upper <= 14 ~ 2,
                                 age_upper > 14 & age_upper <= 44 ~ 3,
@@ -67,7 +67,7 @@ df_2020 <- temp.file %>%
                                 age_upper > 64 & age_upper <= 74 ~ 5,
                                 age_upper > 74 & age_upper <= 84 ~ 6,
                                 age_upper > 84 ~ 7)) %>%
-  group_by(age_groups, week) %>%
+  group_by(age_groups, week) %>% #make age consistent with previous data
   summarise(deaths = sum(deaths)) %>%
   ungroup() %>%
   mutate(age = factor(age_groups,
@@ -158,7 +158,7 @@ prev_download <- lapply(prev_yrs, function(x) {
              age == "01-14" ~ "1-14",
              age == "85+" ~ "85<",
              age != "Under 1 year" & age != "01-14" ~ age),
-           age = as.factor(age))
+           age = as.factor(age)) #make factor consistent
 })
 
 df_prev <- do.call(rbind, prev_download)

@@ -49,7 +49,7 @@ df_2020 <- temp.file %>%
          gender = as.factor(case_when(rn <= 20 ~ "Men",
                                       rn > 20 ~ "Women"))) %>% #add gender var
   rename(age = 1) %>%
-  select(-rn) %>% # rename region name and id
+  select(-rn) %>% # rename age
   rename_at(vars(-1, -gender), function(x){paste0("week_", x)}) %>%
   mutate_at(vars(-1, -gender), as.integer) %>%
   pivot_longer(cols = starts_with("week"),
