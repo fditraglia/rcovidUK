@@ -1,5 +1,7 @@
 # Compile ONS weekly deaths by region
+
 library(tidyverse)
+
 #URL pieces
 
 url_prefix <- paste("https://www.ons.gov.uk/file?uri=%2fpeoplepopulationand",
@@ -184,4 +186,3 @@ usethis::use_data(ONSweeklyagegender, overwrite = TRUE)
 
 # Clean up
 rm(list = ls())
-
